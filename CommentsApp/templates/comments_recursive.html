@@ -1,0 +1,20 @@
+{% if comment.children_comment.all.count > 0 %}
+    <ul class="list-group">
+        {% for c in comment.children_comment.all %}
+                <li class="list-group-item">{{ c.comment }}<span class="badge">{{ c.time }}</span>
+                    {% with comment=c template_name="comments_recursive.html" %}
+                            {% include template_name %}
+                    {% endwith %}
+                    <form method="post" enctype="multipart/form-data" action="/addreply?id={{ c.id }}" class="form-inline panel-body validate">
+                        {% csrf_token %}
+                        <div class="form-group">
+                            <label for="comment"></label>
+                            <input type="text" name="comment" id="comment" placeholder="Reply" class="form-control" data-bvalidator="required" data-bvalidator-msg="Reply Required">
+                        </div>
+                        
+                        <input type="submit" value="Submit" class="btn btn-primary">
+                    </form>
+                </li>
+        {%endfor%}
+    </ul>
+{% endif %}

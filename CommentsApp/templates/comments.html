@@ -1,0 +1,32 @@
+{% extends "body.html" %}
+
+{% block content %}    
+    <!-- Content -->
+    <div class="container" role="main">
+        <ul class="list-group">
+            {% for comment in comments %}
+                <div class="panel panel-default">
+                    <div class="panel-body">
+                        <div class="row">
+                            <div class="col-md-12">
+                                <li class="list-group-item"><span class="badge">{{ comment.time }}</span>{{ comment.comment }}
+                                    {% include "comments_recursive.html" %}
+                                    <form method="post" enctype="multipart/form-data" action="/addreply?id={{ comment.id }}" class="form-inline panel-body validate">
+                                        {% csrf_token %}
+                                        <div class="form-group">
+                                            <label for="comment"></label>
+                                            <input type="text" name="comment" id="comment" placeholder="Reply" class="form-control" data-bvalidator="required" data-bvalidator-msg="Reply Required">
+                                        </div>
+                                        
+                                        <input type="submit" value="Submit" class="btn btn-primary">
+                                    </form>
+                                </li>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            {% endfor %}
+        </ul>
+        <p><a href="/addcomment" class="btn btn-primary">Add Comment</a></p>
+    </div>
+{% endblock %}
